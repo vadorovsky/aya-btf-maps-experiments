@@ -59,6 +59,19 @@ For example:
 LLVM_SYS_150_PREFIX=/home/vadorovsky/repos/llvm-project/build cargo install --path . --no-default-features --features system-llvm bpf-linker
 ```
 
+## Debug info
+
+The main difference between this project and all the current Aya examples is
+that it generates the full debug info in eBPF crate in all profiles. It's
+necessary for generating BTF. So please note the:
+
+```
+debug = 2
+```
+
+option in [Cargo.toml](https://github.com/vadorovsky/aya-btf-maps/blob/main/fork-ebpf/Cargo.toml)
+in all profiles.
+
 ## Build eBPF
 
 ```bash
