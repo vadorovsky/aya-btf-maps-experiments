@@ -1,0 +1,32 @@
+[build]
+target-dir = "../target"
+target = "bpfel-unknown-none"
+
+[unstable]
+build-std = ["core"]
+
+[target.bpfel-unknown-none]
+rustflags = [
+    "-C", "panic=abort",
+    "-C", "lto=yes",
+    "-C", "embed-bitcode=yes",
+    "-C", "debuginfo=2",
+    "-C", "opt-level=3",
+    "-C", "codegen-units=1",
+    "-C", "debug-assertions=no",
+    "-C", "overflow-checks=no",
+    "-C", "incremental=no",
+]
+
+[target.bpfeb-unknown-none]
+rustflags = [
+    "-C", "panic=abort",
+    "-C", "lto=yes",
+    "-C", "embed-bitcode=yes",
+    "-C", "debuginfo=2",
+    "-C", "opt-level=3",
+    "-C", "codegen-units=1",
+    "-C", "debug-assertions=no",
+    "-C", "overflow-checks=no",
+    "-C", "incremental=no",
+]
