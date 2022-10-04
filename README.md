@@ -1,5 +1,10 @@
 # fork
 
+This is an attempt to make BTF maps working in Aya eBPF.
+
+To make sure that we have to use BTF maps, this project is using Aya in the
+eBPF crate and libbpf-sys in the userspace crate.
+
 ## Prerequisites
 
 1. Install a rust stable toolchain: `rustup install stable`
