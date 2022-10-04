@@ -1,2 +1,2 @@
 [workspace]
-members = ["fork", "fork-common", "xtask"]
+members = ["fork", "fork-common", "aya-btf-macros", "xtask"]

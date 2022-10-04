@@ -1,37 +1,15 @@
 #![no_std]
 #![no_main]
 
-use core::marker::PhantomData;
-
 use aya_bpf::{
     bindings::bpf_map_type::BPF_MAP_TYPE_HASH,
     helpers::{bpf_map_update_elem, bpf_printk},
     macros::tracepoint,
     programs::TracePointContext,
 };
+use aya_btf_macros::btf_map;
 
-#[repr(C)]
-pub struct MapDef<K, V> {
-    r#type: u32,
-    // r#type: *const u32,
-    max_entries: u32,
-    map_flags: u32,
-    key: PhantomData<K>,
-    value: PhantomData<V>,
-}
-
-unsafe impl<K: Sync, V: Sync> Sync for MapDef<K, V> {}
-
-#[link_section = ".maps"]
-#[export_name = "PID_MAP"]
-static mut PID_MAP: MapDef<i32, i32> = MapDef {
-    r#type: BPF_MAP_TYPE_HASH,
-    // r#type: &BPF_MAP_TYPE_HASH,
-    max_entries: 1024,
-    map_flags: 0,
-    key: PhantomData,
-    value: PhantomData,
-};
+btf_map!(PID_MAP, BPF_MAP_TYPE_HASH, u32, u32, 1024, 0);
 
 #[tracepoint(name = "fork")]
 pub fn fork(ctx: TracePointContext) -> u32 {
@@ -49,17 +27,17 @@ fn try_fork(ctx: TracePointContext) -> Result<u32, u32> {
     let parent_pid: i32 = unsafe { ctx.read_at(PARENT_PID_OFFSET).map_err(|e| e as u32)? };
     let child_pid: i32 = unsafe { ctx.read_at(CHILD_PID_OFFSET).map_err(|e| e as u32)? };
 
-    let ret = unsafe {
-        bpf_map_update_elem(
-            &mut PID_MAP as *mut MapDef<i32, i32> as *mut _,
-            &parent_pid as *const _ as *const _,
-            &child_pid as *const _ as *const _,
-            0,
-        )
-    };
-    if ret != 0 {
-        return Err(0);
-    }
+    // let ret = unsafe {
+    //     bpf_map_update_elem(
+    //         &mut PID_MAP as *mut MapDef<i32, i32> as *mut _,
+    //         &parent_pid as *const _ as *const _,
+    //         &child_pid as *const _ as *const _,
+    //         0,
+    //     )
+    // };
+    // if ret != 0 {
+    //     return Err(0);
+    // }
 
     unsafe {
         bpf_printk!(
