@@ -29,7 +29,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     let res = unsafe { libbpf_sys::bpf_object__load(bpf) };
     if res != 0 {
-        return Err(anyhow::anyhow!("failed to load bpf object"));
+        return Err(anyhow::anyhow!("failed to load bpf object: {}", res));
     }
 
     let prog = unsafe {
