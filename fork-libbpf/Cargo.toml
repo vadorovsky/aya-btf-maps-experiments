@@ -1,0 +1,16 @@
+[package]
+name = "fork-libbpf"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fork-common = { path = "../fork-common", features=["user"] }
+anyhow = "1.0.42"
+clap = { version = "4.0", features = ["derive"] }
+libbpf-sys = "1.0"
+ctrlc = "3.2"
+
+[[bin]]
+name = "fork-libbpf"
+path = "src/main.rs"

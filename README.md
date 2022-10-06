@@ -8,7 +8,10 @@ The work onn BTF map support is tracked and discussed in:
 * [this Discord tread](https://discord.com/channels/855676609003651072/1026937450624450652)
 
 To make sure that we have to use BTF maps, this project is using Aya in the
-eBPF crate and libbpf-sys in the userspace crate.
+eBPF crate and provides two userspace crates:
+
+* `fork` which uses Aya
+* `fork-libbpf` which uses libbpf-sys in the userspace crate.
 
 ## Prerequisites
 
@@ -169,6 +172,14 @@ cargo build
 
 ## Run
 
+With Aya (in userspace):
+
 ```bash
 cargo xtask run
+```
+
+With libbpf (in userspace):
+
+```bash
+cargo xtask run-libbpf
 ```
