@@ -1,6 +1,11 @@
-# fork
+# BTF map support in Aya
 
 This is an attempt to make BTF maps working in Aya eBPF.
+
+The work onn BTF map support is tracked and discussed in:
+
+* [this Github issue](https://github.com/aya-rs/aya/issues/351)
+* [this Discord tread](https://discord.com/channels/855676609003651072/1026937450624450652)
 
 To make sure that we have to use BTF maps, this project is using Aya in the
 eBPF crate and libbpf-sys in the userspace crate.
