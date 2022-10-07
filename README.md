@@ -65,6 +65,8 @@ you can trim down the number of ninja threads:
 ninja -j[number_of_threads]
 ```
 
+It's also helpful to resize the Swap to match your RAM size and use above command with ``` -l 1 ``` to reduce overhead on the CPU usage because of expensive linking. That way the build is parallel with sequential linking.
+
 If you still have problems or have less than 64GB, try a release build:
 
 ```
