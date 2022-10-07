@@ -1,12 +1,11 @@
 [package]
-name = "fork"
+name = "userspace-aya-ebpf-aya"
 version = "0.1.0"
 edition = "2021"
 publish = false
 
 [dependencies]
 aya = { version = ">=0.11", features=["async_tokio"] }
-aya-log = "0.1"
 fork-common = { path = "../fork-common", features=["user"] }
 anyhow = "1.0.42"
 clap = { version = "3.1", features = ["derive"] }
@@ -15,5 +14,5 @@ log = "0.4"
 tokio = { version = "1.18", features = ["macros", "rt", "rt-multi-thread", "net", "signal"] }
 
 [[bin]]
-name = "fork"
+name = "userspace-aya-ebpf-aya"
 path = "src/main.rs"

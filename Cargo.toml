@@ -1,2 +1,9 @@
 [workspace]
-members = ["fork", "fork-common", "fork-libbpf", "aya-btf-macros", "xtask"]
+members = [
+    "fork-common",
+    "userspace-aya-ebpf-aya",
+    "userspace-aya-ebpf-libbpf",
+    "userspace-libbpf-ebpf-aya",
+    "userspace-libbpf-ebpf-libbpf",
+    "xtask"
+]

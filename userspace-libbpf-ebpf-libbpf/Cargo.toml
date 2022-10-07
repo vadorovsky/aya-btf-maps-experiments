@@ -1,5 +1,5 @@
 [package]
-name = "fork-libbpf"
+name = "userspace-libbpf-ebpf-libbpf"
 version = "0.1.0"
 edition = "2021"
 publish = false
@@ -12,5 +12,5 @@ libbpf-sys = "1.0"
 ctrlc = "3.2"
 
 [[bin]]
-name = "fork-libbpf"
+name = "userspace-libbpf-ebpf-libbpf"
 path = "src/main.rs"

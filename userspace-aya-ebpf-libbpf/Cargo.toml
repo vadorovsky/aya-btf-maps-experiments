@@ -1,0 +1,18 @@
+[package]
+name = "userspace-aya-ebpf-libbpf"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+aya = { version = ">=0.11", features=["async_tokio"] }
+fork-common = { path = "../fork-common", features=["user"] }
+anyhow = "1.0.42"
+clap = { version = "3.1", features = ["derive"] }
+env_logger = "0.9"
+log = "0.4"
+tokio = { version = "1.18", features = ["macros", "rt", "rt-multi-thread", "net", "signal"] }
+
+[[bin]]
+name = "userspace-aya-ebpf-libbpf"
+path = "src/main.rs"

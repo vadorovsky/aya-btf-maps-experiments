@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 aya-bpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
 aya-log-ebpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
-fork-common = { path = "../fork-common" }
-aya-btf-macros = { path = "../aya-btf-macros" }
+fork-common = { path = "../../fork-common" }
+aya-btf-macros = { path = "../../aya-btf-macros" }
 
 [[bin]]
 name = "fork"

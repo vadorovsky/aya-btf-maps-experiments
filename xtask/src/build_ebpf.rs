@@ -3,6 +3,13 @@ use std::process::Command;
 
 use clap::Parser;
 
+#[derive(Debug, Copy, Clone, clap::ArgEnum)]
+pub enum BuildLibrary {
+    All,
+    Aya,
+    Libbpf,
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum Architecture {
     BpfEl,
@@ -38,10 +45,12 @@ pub struct Options {
     /// Build the release target
     #[clap(long)]
     pub release: bool,
+    #[clap(arg_enum, long, default_value_t = BuildLibrary::All)]
+    pub ebpf_lib: BuildLibrary,
 }
 
-pub fn build_ebpf(opts: Options) -> Result<(), anyhow::Error> {
-    let dir = PathBuf::from("fork-ebpf");
+pub fn build_ebpf_aya(opts: Options) -> Result<(), anyhow::Error> {
+    let dir = PathBuf::from("ebpf/fork-ebpf-aya");
     let target = format!("--target={}", opts.target);
     let mut args = vec![
         "+nightly",
@@ -61,4 +70,25 @@ pub fn build_ebpf(opts: Options) -> Result<(), anyhow::Error> {
         .expect("failed to build bpf program");
     assert!(status.success());
     Ok(())
+}
+
+pub fn build_ebpf_libbpf() -> Result<(), anyhow::Error> {
+    let dir = PathBuf::from("ebpf/fork-ebpf-libbpf");
+    let status = Command::new("make")
+        .current_dir(&dir)
+        .status()
+        .expect("failed to build bpf program");
+    assert!(status.success());
+    Ok(())
+}
+
+pub fn build_ebpf(opts: Options) -> Result<(), anyhow::Error> {
+    match opts.ebpf_lib {
+        BuildLibrary::All => {
+            build_ebpf_aya(opts)?;
+            build_ebpf_libbpf()
+        }
+        BuildLibrary::Aya => build_ebpf_aya(opts),
+        BuildLibrary::Libbpf => build_ebpf_libbpf(),
+    }
 }
