@@ -2,16 +2,39 @@
 
 This is an attempt to make BTF maps working in Aya eBPF.
 
-The work onn BTF map support is tracked and discussed in:
+The work on BTF map support is tracked and discussed in:
 
 * [this Github issue](https://github.com/aya-rs/aya/issues/351)
 * [this Discord tread](https://discord.com/channels/855676609003651072/1026937450624450652)
 
-To make sure that we have to use BTF maps, this project is using Aya in the
-eBPF crate and provides two userspace crates:
+## Layout of the project
 
-* `fork` which uses Aya
-* `fork-libbpf` which uses libbpf-sys in the userspace crate.
+To make sure that we can build and compare `.debug_info` and BTF info of eBPF
+programs build in Rust and C, the [ebpf/ subdirectory](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf)
+has two programs:
+
+* [`fork-ebpf-aya`](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf/fork-ebpf-aya) -
+  eBPF program written in Rust with Aya, where we aim to bring the support of BTF maps.
+* [`fork-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf/fork-ebpf-libbpf) -
+  eBPF program written in C with libbpf, which we take as a fully working example
+  with BTF maps and we take its `.debug_info` and BTF info as a reference point.
+
+Then we have four userspace projects which are meant to test every combination
+of Aya and libbpf, both in userspace and eBPF:
+
+* [`userspace-libbpf-ebpf-aya`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-libbpf-ebpf-aya) -
+  the most important one for us, which we need to make working. It's loading th
+  eBPF program written in Aya with libbpf. **NOT WORKING CURRENTLY**
+* [`userspace-libbpf-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-libbpf-ebpf-libbpf) -
+  a reference point, using libbpf on both sides, which always works. **ALWAYS WORKS**
+* [`userspace-aya-ebpf-aya`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-aya-ebpf-aya) -
+  Aya used on both sides. **It's "working" (aka you can run it), which is not an expected result -
+  Aya eBPF is currently emiting wrong BTF (rejected by libbpf userspacew), so we probably want to
+  do similar validation in Aya userspace.**
+* [`userspace-aya-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-aya-ebpf-libbpf) -
+  Aya used in usespace to load a correct libbpf program. **It's not working, which means we do
+  something wrong in Aya, since libbpf loads it without problems. Support of BTF maps in Aya userspace
+  is most likely broken.**
 
 ## Prerequisites
 
@@ -80,15 +103,38 @@ debug = 2
 option in [Cargo.toml](https://github.com/vadorovsky/aya-btf-maps/blob/main/fork-ebpf/Cargo.toml)
 in all profiles.
 
-## Build eBPF
+## Building eBPF
+
+To build both eBPF programs (Aya and libbpf), use:
 
 ```bash
 cargo xtask build-ebpf
 ```
 
+Aya eBPF object will be available as `./target/bpfel-unknown-none/debug/fork`.
+libbpf eBPF object will be available as `./ebpf/fork-ebpf-libbpf/fork.bpf.o`.
+
 To perform a release build you can use the `--release` flag.
 You may also change the target architecture with the `--target` flag
 
+You can build only an Aya eBPF program with:
+
+```bash
+cargo xtask build-ebpf --ebpf-lib aya
+```
+
+You can build only a libbpf eBPF program with:
+
+```bash
+cargo xtask build-ebpf --ebpf-lib libbpf
+```
+
+or:
+
+```bash
+cd ebpf/fork-ebpf-libbpf
+make
+```
 ## Ensuring that debug_info and BTF are there
 
 ```
@@ -164,22 +210,46 @@ $ bpftool btf dump file ./target/bpfel-unknown-none/debug/fork
         type_id=12 offset=0 size=40 (VAR 'PID_MAP')
 ```
 
+The part of work is to also do the similar check for the libbpf eBPF program,
+like:
+
+```bash
+readelf -S ./ebpf/fork-ebpf-libbpf/fork.bpf.o
+bpftool btf dump file ./ebpf/fork-ebpf-libbpf/fork.bpf.o
+```
+
 ## Build Userspace
+
+You can build all the userspace crates with:
 
 ```bash
 cargo build
 ```
 
+Note that you need eBPF programs compiled first.
+
 ## Run
 
-With Aya (in userspace):
+For convenience, we also have an xtask command `run`, which builds and runs a
+requested combination of userspace and eBPF libraries in one command.
+
+By default, without additional arguments, it's running with libbpf as a userspace
+lib and Aya as an eBPF lib:
 
 ```bash
-cargo xtask run
+RUST_LOG=info cargo xtask run
 ```
 
-With libbpf (in userspace):
+That command is equivalent to:
 
 ```bash
-cargo xtask run-libbpf
+RUST_LOG=info cargo xtask run --ebpf-lib aya --userspace-lib libbpf
+```
+
+But you can request any other combination! For example:
+
+```bash
+RUST_LOG=info cargo xtask run --ebpf-lib aya --userspace-lib aya
+RUST_LOG=info cargo xtask run --ebpf-lib libbpf --userspace-lib aya
+RUST_LOG=info cargo xtask run --ebpf-lib libbpf --userspace-lib libbpf
 ```
