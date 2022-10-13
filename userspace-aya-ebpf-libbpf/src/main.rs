@@ -1,12 +1,11 @@
-use aya::{include_bytes_aligned, Bpf};
 use aya::programs::TracePoint;
+use aya::{include_bytes_aligned, Bpf};
 use clap::Parser;
 use log::{info, warn};
 use tokio::signal;
 
 #[derive(Debug, Parser)]
-struct Opt {
-}
+struct Opt {}
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {

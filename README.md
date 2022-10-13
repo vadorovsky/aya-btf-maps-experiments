@@ -32,9 +32,8 @@ of Aya and libbpf, both in userspace and eBPF:
   Aya eBPF is currently emiting wrong BTF (rejected by libbpf userspacew), so we probably want to
   do similar validation in Aya userspace.**
 * [`userspace-aya-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-aya-ebpf-libbpf) -
-  Aya used in usespace to load a correct libbpf program. **It's not working, which means we do
-  something wrong in Aya, since libbpf loads it without problems. Support of BTF maps in Aya userspace
-  is most likely broken.**
+  Aya used in usespace to load a correct libbpf program. **It works, but there is a room for improvement,
+  like [handling section / program names](https://github.com/aya-rs/aya/issues/375).**
 
 ## Prerequisites
 
