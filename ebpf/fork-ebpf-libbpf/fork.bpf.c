@@ -17,7 +17,7 @@ struct fork_ctx {
 	unsigned int child_pid;
 };
 
-SEC("tp/sched/sched_process_fork")
+SEC("tp/fork")
 int fork(void *ctx) {
 	struct fork_ctx *fork_ctx = (struct fork_ctx *)ctx;
 	unsigned int parent_pid = fork_ctx->parent_pid;
