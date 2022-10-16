@@ -3,7 +3,7 @@ use std::{os::unix::process::CommandExt, process::Command};
 use anyhow::Context as _;
 use clap::Parser;
 
-use crate::build_ebpf::{build_ebpf, Architecture, BuildLibrary, Options as BuildOptions};
+use crate::build_ebpf::{build_ebpf, Architecture, Options as BuildOptions};
 
 #[derive(Debug, Copy, Clone, clap::ArgEnum)]
 pub enum RunLibrary {
@@ -48,17 +48,9 @@ fn build(opts: &Options) -> Result<(), anyhow::Error> {
 /// Build and run the project
 pub fn run(opts: Options) -> Result<(), anyhow::Error> {
     // build our ebpf program followed by our application
-    let build_opts = match opts.ebpf_lib {
-        RunLibrary::Aya => BuildOptions {
-            target: opts.bpf_target,
-            release: opts.release,
-            ebpf_lib: BuildLibrary::Aya,
-        },
-        RunLibrary::Libbpf => BuildOptions {
-            target: opts.bpf_target,
-            release: opts.release,
-            ebpf_lib: BuildLibrary::Libbpf,
-        },
+    let build_opts = BuildOptions {
+        target: opts.bpf_target,
+        release: opts.release,
     };
     build_ebpf(build_opts).context("Error while building eBPF program")?;
     build(&opts).context("Error while building userspace applications")?;
