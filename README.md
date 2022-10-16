@@ -254,3 +254,10 @@ RUST_LOG=info cargo xtask run --ebpf-lib aya --userspace-lib aya
 RUST_LOG=info cargo xtask run --ebpf-lib libbpf --userspace-lib aya
 RUST_LOG=info cargo xtask run --ebpf-lib libbpf --userspace-lib libbpf
 ```
+
+Both eBPF programs (Aya and libbpf) are using `bpf_printk`, so you can check
+the debug messages with:
+
+```bash
+sudo bpftool prog tracelog
+```
