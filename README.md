@@ -118,24 +118,13 @@ libbpf eBPF object will be available as `./ebpf/fork-ebpf-libbpf/fork.bpf.o`.
 To perform a release build you can use the `--release` flag.
 You may also change the target architecture with the `--target` flag
 
-You can build only an Aya eBPF program with:
-
-```bash
-cargo xtask build-ebpf --ebpf-lib aya
-```
-
 You can build only a libbpf eBPF program with:
-
-```bash
-cargo xtask build-ebpf --ebpf-lib libbpf
-```
-
-or:
 
 ```bash
 cd ebpf/fork-ebpf-libbpf
 make
 ```
+
 ## Ensuring that debug_info and BTF are there
 
 ```
