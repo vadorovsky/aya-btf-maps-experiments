@@ -53,9 +53,12 @@ WARNING! This example with debug build requires at least 64 GB RAM!
 mkdir build
 cd build
 
-cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_PARALLEL_LINK_JOBS=1 -GNinja ../llvm/
+CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_LLD=1 -GNinja ../llvm/
 ninja
 ```
+
+`LLVM_PARALLEL_LINK_JOBS` ensures that linking is done with only 1 core. Using
+lld and clang(++) makes the build faster.
 
 If you encounter any problems with OOM killer or your machine being unusable,
 you can trim down the number of ninja threads:
@@ -69,7 +72,7 @@ It's also helpful to resize the Swap to match your RAM size and use above comman
 If you still have problems or have less than 64GB, try a release build:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_PARALLEL_LINK_JOBS=1 -GNinja ../llvm/
+CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_LLD=1 -GNinja ../llvm/
 ninja
 ```
 
