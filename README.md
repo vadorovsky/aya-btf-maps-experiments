@@ -53,7 +53,7 @@ WARNING! This example with debug build requires at least 64 GB RAM!
 mkdir build
 cd build
 
-CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_LLD=1 -GNinja ../llvm/
+CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Debug -DLLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_LLD=1 -DLLVM_BUILD_LLVM_DYLIB=1 -GNinja ../llvm/
 ninja
 ```
 
