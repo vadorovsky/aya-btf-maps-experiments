@@ -18,7 +18,7 @@ async fn main() -> Result<(), anyhow::Error> {
     // like to specify the eBPF program at runtime rather than at compile-time, you can
     // reach for `Bpf::load_file` instead.
     let mut bpf = Bpf::load(include_bytes_aligned!(
-        "../../ebpf/fork-ebpf-libbpf/fork.bpf.o"
+        "../../ebpf/fork-ebpf-libbpf/dist/fork.bpf.o"
     ))?;
     let program: &mut TracePoint = bpf.program_mut("fork").unwrap().try_into()?;
     program.load()?;
