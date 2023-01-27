@@ -42,7 +42,7 @@ of Aya and libbpf, both in userspace and eBPF:
 
 ## Build patched LLVM
 
-You need to use [this fork and branch of LLVM](https://github.com/dave-tucker/llvm-project/tree/btfdebug-segfault).
+You need to use [this fork and branch of LLVM](https://github.com/vadorovsky/llvm-project/tree/btfdebug-segfault).
 
 After you clone it somewhere and enter its directory, build LLVM with the
 following commands:
