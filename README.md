@@ -78,7 +78,7 @@ ninja
 
 ## Install bpf-linker with the patched LLVM
 
-You need to use [this fork and branch of bpf-linker](https://github.com/dave-tucker/bpf-linker/tree/bpf-v2).
+You need to use [this fork and branch of bpf-linker](https://github.com/vadorovsky/bpf-linker/tree/strip-debug).
 
 After cloning and entering the directory, we need to install bpf-linker with
 *system-llvm* feature and point to the patched build with `LLVM_SYS_150_PREFIX`
