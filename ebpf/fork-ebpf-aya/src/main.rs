@@ -27,17 +27,17 @@ fn try_fork(ctx: TracePointContext) -> Result<u32, u32> {
     let parent_pid: i32 = unsafe { ctx.read_at(PARENT_PID_OFFSET).map_err(|e| e as u32)? };
     let child_pid: i32 = unsafe { ctx.read_at(CHILD_PID_OFFSET).map_err(|e| e as u32)? };
 
-    // let ret = unsafe {
-    //     bpf_map_update_elem(
-    //         &mut PID_MAP as *mut MapDef<i32, i32> as *mut _,
-    //         &parent_pid as *const _ as *const _,
-    //         &child_pid as *const _ as *const _,
-    //         0,
-    //     )
-    // };
-    // if ret != 0 {
-    //     return Err(0);
-    // }
+    let ret = unsafe {
+        bpf_map_update_elem(
+            &mut PID_MAP as *mut _ as *mut _,
+            &parent_pid as *const _ as *const _,
+            &child_pid as *const _ as *const _,
+            0,
+        )
+    };
+    if ret != 0 {
+        return Err(0);
+    }
 
     unsafe {
         bpf_printk!(
