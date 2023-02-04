@@ -16,7 +16,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     let bpf = unsafe {
         libbpf_sys::bpf_object__open(
-            CString::new("ebpf/fork-ebpf-libbpf/fork.bpf.o")?.as_ptr() as *const c_char
+            CString::new("ebpf/fork-ebpf-libbpf/dist/fork.bpf.o")?.as_ptr() as *const c_char,
         )
     };
 
