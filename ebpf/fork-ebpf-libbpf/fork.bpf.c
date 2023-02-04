@@ -8,6 +8,7 @@ struct {
 	__type(key, unsigned int);
 	__type(value, unsigned int);
 	__uint(max_entries, 1024);
+	__uint(map_flags, 0);
 } pid_map SEC(".maps");
 
 struct fork_ctx {
