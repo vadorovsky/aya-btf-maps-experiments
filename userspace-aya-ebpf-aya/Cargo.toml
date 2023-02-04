@@ -10,7 +10,7 @@ fork-common = { path = "../fork-common", features=["user"] }
 anyhow = "1.0.42"
 env_logger = "0.9"
 log = "0.4"
-tokio = { version = "1.18", features = ["macros", "rt", "rt-multi-thread", "net", "signal"] }
+tokio = { version = "1.18", features = ["macros", "rt", "rt-multi-thread", "net", "signal", "time"] }
 
 [[bin]]
 name = "userspace-aya-ebpf-aya"

@@ -1,7 +1,11 @@
+use aya::maps::HashMap;
 use aya::programs::TracePoint;
 use aya::{include_bytes_aligned, Bpf};
 use log::info;
-use tokio::signal;
+use tokio::{
+    signal,
+    time::{sleep, Duration},
+};
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
@@ -22,6 +26,15 @@ async fn main() -> Result<(), anyhow::Error> {
     let program: &mut TracePoint = bpf.program_mut("fork").unwrap().try_into()?;
     program.load()?;
     program.attach("sched", "sched_process_fork")?;
+
+    let pid_map: HashMap<_, u32, u32> = HashMap::try_from(bpf.map_mut("PID_MAP").unwrap())?;
+    info!("waiting 3 seconds");
+    sleep(Duration::from_secs(3)).await;
+    info!("the current map content:");
+    for r in pid_map.iter() {
+        let (k, v) = r?;
+        info!("parent: {k}, child: {v}");
+    }
 
     info!("Waiting for Ctrl-C...");
     signal::ctrl_c().await?;
