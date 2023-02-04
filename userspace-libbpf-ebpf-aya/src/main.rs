@@ -27,6 +27,10 @@ fn main() -> Result<(), anyhow::Error> {
         )
     };
 
+    if bpf.is_null() {
+        return Err(anyhow::anyhow!("bpf object is null"));
+    }
+
     let res = unsafe { libbpf_sys::bpf_object__load(bpf) };
     if res != 0 {
         return Err(anyhow::anyhow!("failed to load bpf object: {}", res));
