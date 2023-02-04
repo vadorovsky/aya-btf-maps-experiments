@@ -49,7 +49,7 @@ pub(crate) fn btf_map(args: BtfMapArgs) -> Result<TokenStream> {
         map_flags,
     } = args;
 
-    let struct_name = Ident::new(&format!("_ty_{}", name), Span::call_site());
+    let struct_name = Ident::new(&format!("_anon_{}", name), Span::call_site());
     let name_str = format!("{}", name);
 
     Ok(quote! {
