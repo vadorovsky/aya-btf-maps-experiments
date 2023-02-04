@@ -6,14 +6,7 @@ use std::{
     time::Duration,
 };
 
-use clap::Parser;
-
-#[derive(Debug, Parser)]
-struct Opt {}
-
 fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::parse();
-
     #[cfg(debug_assertions)]
     let bpf = unsafe {
         libbpf_sys::bpf_object__open(

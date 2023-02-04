@@ -1,16 +1,10 @@
 use aya::programs::TracePoint;
 use aya::{include_bytes_aligned, Bpf};
-use clap::Parser;
-use log::{info, warn};
+use log::info;
 use tokio::signal;
-
-#[derive(Debug, Parser)]
-struct Opt {}
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::parse();
-
     env_logger::init();
 
     // This will include your eBPF object file as raw bytes at compile-time and load it at

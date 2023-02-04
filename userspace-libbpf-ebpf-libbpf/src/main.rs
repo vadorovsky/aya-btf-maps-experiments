@@ -6,14 +6,7 @@ use std::{
     time::Duration,
 };
 
-use clap::Parser;
-
-#[derive(Debug, Parser)]
-struct Opt {}
-
 fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::parse();
-
     let bpf = unsafe {
         libbpf_sys::bpf_object__open(
             CString::new("ebpf/fork-ebpf-libbpf/dist/fork.bpf.o")?.as_ptr() as *const c_char,
