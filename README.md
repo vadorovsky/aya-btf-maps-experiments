@@ -160,30 +160,29 @@ You can also dump BTF info with:
 
 ```
 $ bpftool btf dump file ./target/bpfel-unknown-none/debug/fork
-[1] PTR '*const [i32; 1]' type_id=3
+[1] PTR '(anon)' type_id=3
 [2] INT 'i32' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
 [3] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1
 [4] INT '__ARRAY_SIZE_TYPE__' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-[5] PTR '*const u32' type_id=6
-[6] INT 'u32' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-[7] PTR '*const [i32; 1024]' type_id=8
-[8] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1024
-[9] PTR '*const [i32; 0]' type_id=10
-[10] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=0
-[11] STRUCT '_ty_PID_MAP' size=40 vlen=5
+[5] PTR '(anon)' type_id=2
+[6] PTR '(anon)' type_id=7
+[7] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1024
+[8] PTR '(anon)' type_id=9
+[9] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=0
+[10] STRUCT '(anon)' size=40 vlen=5
         'type' type_id=1 bits_offset=0
         'key' type_id=5 bits_offset=64
-        'max_entries' type_id=7 bits_offset=192
-        'map_flags' type_id=9 bits_offset=256
-[12] VAR 'PID_MAP' type_id=11, linkage=global
-[13] PTR '*mut core::ffi::c_void' type_id=14
-[14] ENUM 'c_void' size=1 vlen=2
+        'value' type_id=5 bits_offset=128
+        'max_entries' type_id=6 bits_offset=192
+[12] PTR '(anon)' type_id=13
+[13] ENUM 'c_void' encoding=UNSIGNED size=1 vlen=2
         '__variant1' val=0
         '__variant2' val=1
-[15] FUNC_PROTO '(anon)' ret_type_id=6 vlen=1
-        'ctx' type_id=13
-[16] FUNC 'fork' type_id=15 linkage=global
-[17] PTR '*mut u8' type_id=18
+[14] FUNC_PROTO '(anon)' ret_type_id=15 vlen=1
+        'ctx' type_id=12
+[15] INT 'u32' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[16] FUNC 'fork' type_id=14 linkage=global
+[17] PTR '(anon)' type_id=18
 [18] INT 'u8' size=1 bits_offset=0 nr_bits=8 encoding=(none)
 [19] INT 'usize' size=8 bits_offset=0 nr_bits=64 encoding=(none)
 [20] FUNC_PROTO '(anon)' ret_type_id=0 vlen=3
@@ -197,7 +196,7 @@ $ bpftool btf dump file ./target/bpfel-unknown-none/debug/fork
         'n' type_id=19
 [23] FUNC 'memcpy' type_id=22 linkage=global
 [24] DATASEC '.maps' size=0 vlen=1
-        type_id=12 offset=0 size=40 (VAR 'PID_MAP')
+        type_id=11 offset=0 size=40 (VAR 'PID_MAP')
 ```
 
 The part of work is to also do the similar check for the libbpf eBPF program,
