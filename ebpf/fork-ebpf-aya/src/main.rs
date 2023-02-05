@@ -1,7 +1,7 @@
 #![no_std]
 #![no_main]
 
-use aya_bpf::{cty::c_long, helpers::bpf_printk, macros::tracepoint, programs::TracePointContext};
+use aya_bpf::{cty::c_long, macros::tracepoint, programs::TracePointContext};
 use aya_btf_map::{macros::btf_map, HashMap};
 
 #[btf_map]
@@ -25,13 +25,6 @@ fn try_fork(ctx: TracePointContext) -> Result<u32, c_long> {
 
     unsafe { PID_MAP.insert(&parent_pid, &child_pid, 0)? };
 
-    unsafe {
-        bpf_printk!(
-            b"fork! parent pid: {}, child pid: {}",
-            parent_pid,
-            child_pid
-        );
-    }
     Ok(0)
 }
 
