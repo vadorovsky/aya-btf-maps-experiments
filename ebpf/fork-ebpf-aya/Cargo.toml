@@ -7,7 +7,7 @@ edition = "2021"
 aya-bpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
 aya-log-ebpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
 fork-common = { path = "../../fork-common" }
-aya-btf-macros = { path = "../../aya-btf-macros" }
+aya-btf-map = { git = "https://github.com/vadorovsky/aya-btf-map", branch = "main" }
 
 [[bin]]
 name = "fork"
