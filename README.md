@@ -13,11 +13,9 @@ To make sure that we can build and compare `.debug_info` and BTF info of eBPF
 programs build in Rust and C, the [ebpf/ subdirectory](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf)
 has two programs:
 
-* [`fork-ebpf-aya`](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf/fork-ebpf-aya) -
-  eBPF program written in Rust with Aya, where we aim to bring the support of BTF maps.
-* [`fork-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/ebpf/fork-ebpf-libbpf) -
-  eBPF program written in C with libbpf, which we take as a fully working example
-  with BTF maps and we take its `.debug_info` and BTF info as a reference point.
+* [eBPF program written in Rust with Aya](https://github.com/vadorovsky/aya-btf-maps-experiments/tree/main/ebpf/aya).
+* [eBPF program written in C with libbpf](https://github.com/vadorovsky/aya-btf-maps-experiments/tree/main/ebpf/libbpf),
+  where we take its `.debug_info` and BTF info as a reference point.
 
 Then we have four userspace projects which are meant to test every combination
 of Aya and libbpf, both in userspace and eBPF:
@@ -26,11 +24,9 @@ of Aya and libbpf, both in userspace and eBPF:
   the most important one for us, which we need to make working. It's loading th
   eBPF program written in Aya with libbpf. **NOT WORKING CURRENTLY**
 * [`userspace-libbpf-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-libbpf-ebpf-libbpf) -
-  a reference point, using libbpf on both sides, which always works. **ALWAYS WORKS**
+  a reference point, using libbpf on both sides, which always works.
 * [`userspace-aya-ebpf-aya`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-aya-ebpf-aya) -
-  Aya used on both sides. **It's "working" (aka you can run it), which is not an expected result -
-  Aya eBPF is currently emiting wrong BTF (rejected by libbpf userspacew), so we probably want to
-  do similar validation in Aya userspace.**
+  Aya used on both sides,
 * [`userspace-aya-ebpf-libbpf`](https://github.com/vadorovsky/aya-btf-maps/tree/main/userspace-aya-ebpf-libbpf) -
   Aya used in usespace to load a correct libbpf program. **It works, but there is a room for improvement,
   like [handling section / program names](https://github.com/aya-rs/aya/issues/375).**
@@ -42,12 +38,13 @@ of Aya and libbpf, both in userspace and eBPF:
 
 ## Build patched LLVM
 
-You need to use [this fork and branch of LLVM](https://github.com/vadorovsky/llvm-project/tree/btfdebug-segfault).
+You need to use [this fork and branch of LLVM](https://github.com/vadorovsky/llvm-project/tree/bpf-fixes).
 
 After you clone it somewhere and enter its directory, build LLVM with the
 following commands:
 
-WARNING! This example with debug build requires at least 64 GB RAM!
+WARNING! This example with debug build requires at least 32 GB RAM to build in
+reasonable time.
 
 ```
 mkdir build
@@ -78,20 +75,20 @@ ninja
 
 ## Install bpf-linker with the patched LLVM
 
-You need to use [this fork and branch of bpf-linker](https://github.com/vadorovsky/bpf-linker/tree/strip-debug).
+You need to use [this fork and branch of bpf-linker](https://github.com/vadorovsky/bpf-linker/tree/fix-di).
 
 After cloning and entering the directory, we need to install bpf-linker with
-*system-llvm* feature and point to the patched build with `LLVM_SYS_150_PREFIX`
+*system-llvm* feature and point to the patched build with `LLVM_SYS_160_PREFIX`
 variable:
 
 ```
-LLVM_SYS_150_PREFIX=[path_to_your_llvm_repo]/build cargo install --path . --no-default-features --features system-llvm bpf-linker
+LLVM_SYS_160_PREFIX=[path_to_your_llvm_repo]/build cargo install --path . --no-default-features --features system-llvm bpf-linker
 ```
 
 For example:
 
 ```
-LLVM_SYS_150_PREFIX=/home/vadorovsky/repos/llvm-project/build cargo install --path . --no-default-features --features system-llvm bpf-linker
+LLVM_SYS_160_PREFIX=/home/vadorovsky/repos/llvm-project/build cargo install --path . --no-default-features --features system-llvm bpf-linker
 ```
 
 ## Debug info
@@ -104,7 +101,7 @@ necessary for generating BTF. So please note the:
 debug = 2
 ```
 
-option in [Cargo.toml](https://github.com/vadorovsky/aya-btf-maps/blob/main/fork-ebpf/Cargo.toml)
+option in [Cargo.toml](https://github.com/vadorovsky/aya-btf-maps/blob/main/ebpf/aya/Cargo.toml)
 in all profiles.
 
 ## Building eBPF
@@ -116,7 +113,7 @@ cargo xtask build-ebpf
 ```
 
 Aya eBPF object will be available as `./target/bpfel-unknown-none/debug/fork`.
-libbpf eBPF object will be available as `./ebpf/fork-ebpf-libbpf/fork.bpf.o`.
+libbpf eBPF object will be available as `./ebpf/libbpf/fork.bpf.o`.
 
 To perform a release build you can use the `--release` flag.
 You may also change the target architecture with the `--target` flag
@@ -124,7 +121,7 @@ You may also change the target architecture with the `--target` flag
 You can build only a libbpf eBPF program with:
 
 ```bash
-cd ebpf/fork-ebpf-libbpf
+cd ebpf/libbpf
 make
 ```
 
