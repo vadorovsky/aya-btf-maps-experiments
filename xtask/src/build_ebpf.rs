@@ -41,7 +41,7 @@ pub struct Options {
 }
 
 pub fn build_ebpf_aya(opts: Options) -> Result<(), anyhow::Error> {
-    let dir = PathBuf::from("ebpf/fork-ebpf-aya");
+    let dir = PathBuf::from("ebpf/aya");
     let target = format!("--target={}", opts.target);
     let mut args = vec![
         "build",
@@ -69,7 +69,7 @@ pub fn build_ebpf_aya(opts: Options) -> Result<(), anyhow::Error> {
 }
 
 pub fn build_ebpf_libbpf() -> Result<(), anyhow::Error> {
-    let dir = PathBuf::from("ebpf/fork-ebpf-libbpf");
+    let dir = PathBuf::from("ebpf/libbpf");
     let status = Command::new("make")
         .current_dir(&dir)
         .status()
