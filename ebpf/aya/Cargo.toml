@@ -4,10 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-aya-bpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
-aya-log-ebpf = { git = "https://github.com/aya-rs/aya", branch = "main" }
+aya-bpf = { git = "https://github.com/vadorovsky/aya", branch = "btf-maps" }
+aya-log-ebpf = { git = "https://github.com/vadorovsky/aya", branch = "btf-maps" }
 fork-common = { path = "../../fork-common" }
-aya-btf-map = { git = "https://github.com/vadorovsky/aya-btf-map", branch = "main" }
+
+[patch."https://github.com/aya-rs/aya"]
+aya-bpf = { git = "https://github.com/vadorovsky/aya", branch = "btf-maps" }
+aya-bpf-macros = { git = "https://github.com/vadorovsky/aya", branch = "btf-maps" }
 
 [[bin]]
 name = "fork"

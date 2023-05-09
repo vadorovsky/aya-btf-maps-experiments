@@ -1,15 +1,20 @@
 #![no_std]
 #![no_main]
 
-use aya_bpf::{cty::c_long, macros::tracepoint, programs::TracePointContext, BpfContext};
-use aya_btf_map::{macros::btf_map, HashMap};
+use aya_bpf::{
+    cty::c_long,
+    macros::{map, tracepoint},
+    maps::HashMap,
+    programs::TracePointContext,
+    BpfContext,
+};
 use aya_log_ebpf::{error, info, WriteToBuf};
 
-#[btf_map]
-static mut PID_MAP: HashMap<i32, i32, 1024> = HashMap::new();
+#[map]
+static PID_MAP: HashMap<i32, i32> = HashMap::with_max_entries(1024, 0);
 
-#[btf_map]
-static mut DUMMY_MAP: HashMap<i32, Dummy<u32, 1024>, 1024> = HashMap::new();
+#[map]
+static DUMMY_MAP: HashMap<i32, Dummy<u32, 1024>> = HashMap::with_max_entries(1024, 0);
 
 #[tracepoint(name = "fork")]
 pub fn fork(ctx: TracePointContext) -> u32 {
@@ -47,7 +52,7 @@ fn try_fork(ctx: TracePointContext) -> Result<u32, c_long> {
         info!(&ctx, "dummy: {}", dummy.a);
     }
 
-    unsafe { PID_MAP.insert(&parent_pid, &child_pid, 0)? };
+    PID_MAP.insert(&parent_pid, &child_pid, 0)?;
 
     Ok(0)
 }
